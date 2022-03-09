@@ -1,0 +1,336 @@
+Messages
+========
+
+etc/scripts/compilemessages.py
+  Line: 27
+    pylint: consider-using-f-string / Formatting a regular string which could be a f-string (col 54)
+  Line: 32
+    pycodestyle: E741 / ambiguous variable name 'l' (col 61)
+  Line: 44
+    pylint: unused-variable / Unused variable 'i' (col 8)
+  Line: 45
+    pylint: consider-using-f-string / Formatting a regular string which could be a f-string (col 14)
+  Line: 54
+    pylint: unused-variable / Unused variable 'output' (col 8)
+  Line: 57
+    pylint: consider-using-f-string / Formatting a regular string which could be a f-string (col 22)
+  Line: 59
+    pylint: consider-using-f-string / Formatting a regular string which could be a f-string (col 22)
+  Line: 69
+    pylint: consider-using-with / Consider using 'with' for resource-allocating operations (col 12)
+  Line: 71
+    pylint: consider-using-f-string / Formatting a regular string which could be a f-string (col 30)
+
+locustfile.py
+  Line: 1
+    pylint: django-not-configured / Django was not configured. For more information run pylint --load-plugins=pylint_django --help-msg=django-not-configured
+    pylint: import-error / Unable to import 'locust'
+  Line: 3
+    pycodestyle: E741 / ambiguous variable name 'l' (col 11)
+  Line: 6
+    pycodestyle: E741 / ambiguous variable name 'l' (col 15)
+  Line: 9
+    pycodestyle: E741 / ambiguous variable name 'l' (col 13)
+
+makefile.py
+  Line: 1
+    pylint: import-error / Unable to import 'schedule'
+  Line: 3
+    pylint: unused-import / Unused import subprocess
+  Line: 9
+    pylint: consider-using-f-string / Formatting a regular string which could be a f-string (col 14)
+  Line: 21
+    pylint: trailing-newlines / Trailing newlines
+
+src/ARte/config/jinja2.py
+  Line: 22
+    pylint: trailing-newlines / Trailing newlines
+
+src/ARte/config/settings.py
+  Line: 2
+    pylint: import-error / Unable to import 'environ'
+  Line: 39
+    pylint: import-error / Unable to import 'sentry_sdk'
+    pylint: wrong-import-position / Import "import sentry_sdk" should be placed at the top of the module
+  Line: 40
+    pylint: import-error / Unable to import 'sentry_sdk.integrations.django'
+    pylint: wrong-import-position / Import "from sentry_sdk.integrations.django import DjangoIntegration" should be placed at the top of the module
+  Line: 90
+    pycodestyle: E305 / expected 2 blank lines after class or function definition, found 1 (col 1)
+  Line: 106
+    pycodestyle: E131 / continuation line unaligned for hanging indent (col 5)
+
+src/ARte/config/storage_backends.py
+  Line: 2
+    pylint: import-error / Unable to import 'storages.backends.s3boto3'
+
+src/ARte/config/urls.py
+  Line: 5
+    pylint: import-error / Unable to import 'debug_toolbar'
+
+src/ARte/config/wait_db.py
+  Line: 49
+    pylint: import-outside-toplevel / Import outside toplevel (psycopg2) (col 4)
+
+src/ARte/core/helpers.py
+  Line: 1
+    pylint: import-error / Unable to import 'django.contrib.staticfiles.templatetags.staticfiles'
+
+src/ARte/core/models.py
+  Line: 3
+    pylint: unused-import / Unused datetime imported from datetime
+  Line: 5
+    pylint: unused-import / Unused post_save imported from django.db.models.signals
+  Line: 6
+    pylint: unused-import / Unused import urllib
+  Line: 31
+    pylint: import-outside-toplevel / Import outside toplevel (core.models.Exhibit) (col 8)
+    pylint: import-self / Module import itself (col 8)
+  Line: 36
+    pylint: import-outside-toplevel / Import outside toplevel (core.models.Exhibit) (col 8)
+    pylint: import-self / Module import itself (col 8)
+  Line: 69
+    pylint: import-outside-toplevel / Import outside toplevel (core.models.Exhibit) (col 8)
+    pylint: import-self / Module import itself (col 8)
+  Line: 74
+    pylint: import-outside-toplevel / Import outside toplevel (core.models.Exhibit) (col 8)
+    pylint: import-self / Module import itself (col 8)
+  Line: 151
+    pylint: no-else-return / Unnecessary "else" after "return" (col 8)
+  Line: 177
+    pylint: import-outside-toplevel / Import outside toplevel (core.models.Exhibit) (col 8)
+    pylint: import-self / Module import itself (col 8)
+  Line: 182
+    pylint: import-outside-toplevel / Import outside toplevel (core.models.Exhibit) (col 8)
+    pylint: import-self / Module import itself (col 8)
+  Line: 194
+    pylint: unused-argument / Unused argument 'sender' (col 23)
+
+src/ARte/core/routes.py
+  Line: 1
+    pylint: import-error / Unable to import 'boogie.router'
+
+src/ARte/core/urls.py
+  Line: 1
+    pylint: unused-import / Unused re_path imported from django.urls
+  Line: 2
+    pylint: unused-import / Unused index imported from views
+  Line: 3
+    pylint: unused-import / Unused ar_viewer imported from views_s.home
+
+src/ARte/core/views_s/home.py
+  Line: 1
+    pyflakes: F401 / 'django.shortcuts.Http404' imported but unused (col 1)
+  Line: 2
+    pyflakes: F401 / 'django.urls.reverse' imported but unused (col 1)
+
+src/ARte/users/factory.py
+  Line: 1
+    pylint: import-error / Unable to import 'factory'
+    pylint: unused-import / Unused import factory
+  Line: 2
+    pylint: import-error / Unable to import 'factory.django'
+  Line: 5
+    pylint: imported-auth-user / User model imported from django.contrib.auth.models
+
+src/ARte/users/forms.py
+  Line: 6
+    pylint: wrong-import-position / Import "from django import forms" should be placed at the top of the module
+  Line: 7
+    pylint: wrong-import-position / Import "from django.contrib.auth import get_user_model, authenticate" should be placed at the top of the module
+  Line: 8
+    pylint: wrong-import-position / Import "from django.contrib.auth.forms import UserCreationForm, AuthenticationForm" should be placed at the top of the module
+  Line: 9
+    pylint: wrong-import-position / Import "from django.contrib.auth.forms import PasswordChangeForm as OrigPasswordChangeForm" should be placed at the top of the module
+  Line: 10
+    pylint: wrong-import-position / Import "from django.utils.translation import ugettext_lazy as _" should be placed at the top of the module
+  Line: 11
+    pylint: wrong-import-position / Import "from django.forms.widgets import HiddenInput" should be placed at the top of the module
+  Line: 13
+    pylint: wrong-import-position / Import "from core.models import Marker, Object, Artwork" should be placed at the top of the module
+    pylint: unused-import / Unused Artwork imported from core.models
+  Line: 14
+    pylint: wrong-import-position / Import "from .models import Profile" should be placed at the top of the module
+    pylint: unused-import / Unused Profile imported from models
+  Line: 34
+    pylint: super-with-arguments / Consider using Python 3 style super() without arguments (col 8)
+  Line: 53
+    pycodestyle: E305 / expected 2 blank lines after class or function definition, found 1 (col 1)
+    pylint: wrong-import-position / Import "from .choices import COUNTRY_CHOICES" should be placed at the top of the module
+  Line: 57
+    pylint: super-with-arguments / Consider using Python 3 style super() without arguments (col 8)
+  Line: 70
+    pylint: super-with-arguments / Consider using Python 3 style super() without arguments (col 8)
+  Line: 122
+    pylint: super-with-arguments / Consider using Python 3 style super() without arguments (col 8)
+  Line: 177
+    pylint: super-with-arguments / Consider using Python 3 style super() without arguments (col 8)
+  Line: 189
+    pylint: modelform-uses-exclude / Use explicit fields instead of exclude in ModelForm (col 8)
+  Line: 196
+    pylint: super-with-arguments / Consider using Python 3 style super() without arguments (col 8)
+  Line: 209
+    pylint: modelform-uses-exclude / Use explicit fields instead of exclude in ModelForm (col 8)
+  Line: 224
+    pylint: super-with-arguments / Consider using Python 3 style super() without arguments (col 8)
+  Line: 248
+    pylint: super-with-arguments / Consider using Python 3 style super() without arguments (col 8)
+
+src/ARte/users/models.py
+  Line: 2
+    pylint: imported-auth-user / User model imported from django.contrib.auth.models
+  Line: 3
+    pylint: unused-import / Unused post_delete imported from django.db.models.signals
+  Line: 5
+    pylint: unused-import / Unused default_storage imported from django.core.files.storage
+  Line: 6
+    pylint: unused-import / Unused import re
+  Line: 25
+    pylint: unused-argument / Unused argument 'sender' (col 24)
+  Line: 31
+    pylint: unused-argument / Unused argument 'sender' (col 22)
+
+src/ARte/users/services/email_service.py
+  Line: 29
+    pylint: consider-using-f-string / Formatting a regular string which could be a f-string (col 34)
+
+src/ARte/users/services/encrypt_service.py
+  Line: 1
+    pylint: multiple-imports / Multiple imports on one line (hashlib, secrets)
+  Line: 8
+    pylint: consider-using-f-string / Formatting a regular string which could be a f-string (col 17)
+    pycodestyle: E501 / line too long (184 > 159 characters) (col 160)
+
+src/ARte/users/services/user_service.py
+  Line: 4
+    pylint: imported-auth-user / User model imported from django.contrib.auth.models
+    pylint: wrong-import-position / Import "from django.contrib.auth.models import User" should be placed at the top of the module
+
+src/ARte/users/urls.py
+  Line: 5
+    pycodestyle: E501 / line too long (389 > 159 characters) (col 160)
+
+src/ARte/users/views.py
+  Line: None
+    pycodestyle: E101 / indentation contains mixed spaces and tabs (col 1)
+  Line: 3
+    pylint: unused-import / Unused datetime imported from datetime
+  Line: 4
+    pylint: unused-import / Unused import hashlib
+  Line: 6
+    pylint: wrong-import-position / Import "from django.contrib.auth import login, authenticate" should be placed at the top of the module
+  Line: 7
+    pylint: wrong-import-position / Import "import django.contrib.auth" should be placed at the top of the module
+    pylint: unused-import / Unused import django.contrib.auth
+  Line: 8
+    pylint: imported-auth-user / User model imported from django.contrib.auth.models
+    pylint: wrong-import-position / Import "from django.contrib.auth.models import User" should be placed at the top of the module
+  Line: 9
+    pylint: wrong-import-position / Import "from django.shortcuts import render, redirect, get_object_or_404" should be placed at the top of the module
+  Line: 10
+    pylint: wrong-import-position / Import "from django.contrib.auth import update_session_auth_hash, get_user_model" should be placed at the top of the module
+  Line: 11
+    pylint: wrong-import-position / Import "from django.contrib.auth.forms import SetPasswordForm" should be placed at the top of the module
+  Line: 12
+    pylint: wrong-import-position / Import "from django.contrib.auth.decorators import login_required" should be placed at the top of the module
+  Line: 13
+    pylint: wrong-import-position / Import "from django.utils.translation import ugettext_lazy as _" should be placed at the top of the module
+    pylint: unused-import / Unused ugettext_lazy imported from django.utils.translation as _
+  Line: 14
+    pylint: wrong-import-position / Import "from django.http import Http404" should be placed at the top of the module
+  Line: 15
+    pylint: wrong-import-position / Import "from django.http import HttpResponse" should be placed at the top of the module
+  Line: 16
+    pylint: wrong-import-position / Import "from django.views.decorators.cache import cache_page" should be placed at the top of the module
+  Line: 17
+    pylint: wrong-import-position / Import "from django.views.decorators.http import require_http_methods" should be placed at the top of the module
+  Line: 20
+    pylint: wrong-import-position / Import "from .forms import SignupForm, RecoverPasswordCodeForm, RecoverPasswordForm, UploadMarkerForm, UploadObjectForm, ArtworkForm, ExhibitForm, ProfileForm, PasswordChangeForm" should be placed at the top of the module
+    pycodestyle: E501 / line too long (170 > 159 characters) (col 160)
+  Line: 21
+    pylint: wrong-import-position / Import "from core.models import Exhibit, Marker, Object, Artwork" should be placed at the top of the module
+  Line: 22
+    pylint: unused-wildcard-import / Unused imports from wildcard import: (s)
+    pylint: wrong-import-position / Import "from core.helpers import *" should be placed at the top of the module
+  Line: 23
+    pylint: wrong-import-position / Import "from .models import Profile" should be placed at the top of the module
+  Line: 24
+    pylint: wrong-import-position / Import "from .services.email_service import EmailService" should be placed at the top of the module
+  Line: 25
+    pylint: wrong-import-position / Import "from .services.user_service import UserService" should be placed at the top of the module
+  Line: 26
+    pylint: wrong-import-position / Import "from .services.encrypt_service import EncryptService" should be placed at the top of the module
+  Line: 48
+    pycodestyle: E305 / expected 2 blank lines after class or function definition, found 1 (col 1)
+    pyflakes: F811 / redefinition of unused 'User' from line 8 (col 1)
+  Line: 51
+    pylint: no-else-return / Unnecessary "else" after "return" (col 4)
+  Line: 78
+    pylint: consider-using-f-string / Formatting a regular string which could be a f-string (col 14)
+  Line: 85
+    pylint: no-else-return / Unnecessary "else" after "return" (col 4)
+  Line: 91
+    pylint: logging-not-lazy / Use lazy % formatting in logging functions (col 12)
+  Line: 92
+    pylint: logging-not-lazy / Use lazy % formatting in logging functions (col 12)
+  Line: 94
+    pylint: no-else-return / Unnecessary "else" after "return" (col 12)
+  Line: 149
+    pylint: too-many-arguments / Too many arguments (7/5)
+    pylint: unused-argument / Unused argument 'form' (col 25)
+  Line: 286
+    pylint: http-response-with-json-dumps / Instead of HttpResponse(json.dumps(data)) use JsonResponse(data) (col 11)
+  Line: 331
+    pylint: http-response-with-content-type-json / Instead of HttpResponse(content_type='application/json') use JsonResponse() (col 11)
+  Line: 368
+    pylint: no-else-return / Unnecessary "else" after "return" (col 8)
+  Line: 369
+    pylint: pointless-statement / Statement seems to have no effect (col 12)
+  Line: 517
+    pylint: no-else-return / Unnecessary "else" after "return" (col 8)
+  Line: 563
+    pylint: bad-indentation / Bad indentation. Found 7 spaces, expected 8
+  Line: 565
+    pylint: bad-indentation / Bad indentation. Found 7 spaces, expected 8
+  Line: 567
+    pylint: bad-indentation / Bad indentation. Found 7 spaces, expected 8
+  Line: 569
+    pylint: bad-indentation / Bad indentation. Found 7 spaces, expected 8
+  Line: 591
+    pylint: unused-argument / Unused argument 'user' (col 38)
+  Line: 593
+    pyflakes: F405 / 'model' may be undefined, or defined from star imports: core.helpers (col 54)
+    pylint: undefined-variable / Undefined variable 'model' (col 53)
+  Line: 648
+    pylint: bad-indentation / Bad indentation. Found 7 spaces, expected 8
+  Line: 650
+    pylint: bad-indentation / Bad indentation. Found 7 spaces, expected 8
+  Line: 652
+    pylint: bad-indentation / Bad indentation. Found 7 spaces, expected 8
+  Line: 654
+    pylint: bad-indentation / Bad indentation. Found 7 spaces, expected 8
+
+tasks.py
+  Line: 1
+    pylint: import-error / Unable to import 'invoke'
+  Line: 36
+    pylint: unused-argument / Unused argument 'ssl' (col 13)
+  Line: 111
+    pylint: redefined-builtin / Redefining built-in 'compile' (col 14)
+  Line: 146
+    pycodestyle: E114 / indentation is not a multiple of 4 (comment) (col 2)
+
+
+
+Check Information
+=================
+         Started: 2022-03-08 14:56:25.296756
+        Finished: 2022-03-08 14:56:37.217341
+      Time Taken: 11.92 seconds
+       Formatter: grouped
+        Profiles: default, no_doc_warnings, no_test_warnings, strictness_medium, strictness_high, strictness_veryhigh, no_member_warnings
+      Strictness: None
+  Libraries Used: django
+       Tools Run: dodgy, mccabe, profile-validator, pycodestyle, pyflakes, pylint
+  Messages Found: 149
+
