@@ -40,6 +40,7 @@ class SignupForm(UserCreationForm):
         model = User
         fields = ['email', 'username', 'password1', 'password2']
 
+
     def clean_email(self):
         email = self.cleaned_data.get('email')
         username = self.cleaned_data.get('username')
@@ -107,12 +108,8 @@ class ProfileForm(forms.ModelForm):
             raise forms.ValidationError(_('Username already in use'))
         return username
 
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        if email and User.objects.filter(email=email).exclude(username=self.instance.user.username).exists():
-            raise forms.ValidationError(_('Email address must be unique'))
+    # call clean email Function
 
-        return email
 
 
 class LoginForm(AuthenticationForm):
