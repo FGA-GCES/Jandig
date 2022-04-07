@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404, JsonResponse
 from django.views.decorators.cache import cache_page
 from django.views.decorators.http import require_http_methods
+from ARte.users.views_utils.artwork_utils import build_element_data, save_artwork, save_exhibit
 from ARte.users.views_utils.password_utils import build_global_vars, validate_username_or_email
 from ARte.users.views_utils.element_utils import build_ctx, build_existent_element, save_element
 from ARte.users.views_utils.signup_utils import perform_save
@@ -13,7 +14,6 @@ from core.models import Exhibit, Marker, Object, Artwork
 from .models import Profile
 from .services.email_service import EmailService
 from .services.user_service import UserService
-from .services.encrypt_service import EncryptService
 from .forms import (
     SignupForm,
     RecoverPasswordCodeForm,
@@ -171,15 +171,8 @@ def create_artwork(request):
             augmented = get_augmented(request, form)
 
             if marker and augmented:
-                artwork_title = form.cleaned_data['title']
-                artwork_desc = form.cleaned_data['description']
-                Artwork(
-                    author=request.user.profile,
-                    marker=marker,
-                    augmented=augmented,
-                    title=artwork_title,
-                    description=artwork_desc
-                ).save()
+                save_artwork(form, request, marker, augmented)
+            
             return redirect('home')
     else:
         form = ArtworkForm()
@@ -202,18 +195,9 @@ def create_exhibit(request):
     if request.method == 'POST':
         form = ExhibitForm(request.POST)
         if form.is_valid():
-            ids = form.cleaned_data['artworks'].split(',')
-            artworks = Artwork.objects.filter(id__in=ids)
-            exhibit = Exhibit(
-                            owner=request.user.profile,
-                            name=form.cleaned_data['name'],
-                            slug=form.cleaned_data['slug'],
-                            )
-
-            exhibit.save()
-            exhibit.artworks.set(artworks)
-
+            save_exhibit(form, request)
             return redirect('home')
+
     else:
         form = ExhibitForm()
 
@@ -274,43 +258,15 @@ def download_exhibit(request):
 def element_get(request):
     if request.GET.get('marker_id', None):
         element_type = 'marker'
-        element = get_object_or_404(Marker, pk=request.GET['marker_id'])
     elif request.GET.get('object_id', None):
         element_type = 'object'
-        element = get_object_or_404(Object, pk=request.GET['object_id'])
     elif request.GET.get('artwork_id', None):
         element_type = 'artwork'
-        element = get_object_or_404(Artwork, pk=request.GET['artwork_id'])
 
-    if element_type == 'artwork':
-        data = {
-	    'id_marker' : element.marker.id,
-	    'id_object' : element.augmented.id,
-            'type': element_type,
-            'author': element.author.user.username,
-            'owner_id': element.author.user.id,
-            'exhibits': element.exhibits_count,
-            'created_at': element.created_at.strftime('%d %b, %Y'),
-            'marker': element.marker.source.url,
-            'augmented': element.augmented.source.url,
-            'augmented_size': element.augmented.source.size,
-            'title': element.title,
-            'description': element.description,
-        }
-    else:
-        data = {
-            'id' : element.id,
-            'type': element_type,
-            'author': element.author,
-            'owner': element.owner.user.username,
-            'owner_id': element.owner_id,
-            'artworks': element.artworks_count,
-            'exhibits': element.exhibits_count,
-            'source': element.source.url,
-            'size': element.source.size,
-            'uploaded_at': element.uploaded_at.strftime('%d %b, %Y'),
-        }
+    element_type_id = element_type + '_id'
+    element = get_object_or_404(Artwork, pk=request.GET[element_type_id])
 
+    data = build_element_data(element_type, element)
     serialized = json.dumps(data)
 
     return JsonResponse(serialized)
