@@ -59,16 +59,11 @@ def get_collection_items(request):
 @require_http_methods(["GET"])
 def get_all_items(request):
     request_type = request.GET.get('which')
-    ctx = {}
-    if request_type == 'objects':
-        ctx = {'objects': Object.objects.all(), "seeall": True, }
-    elif request_type == 'markers':
-        ctx = {'markers':  Marker.objects.all(), "seeall": True, }
-    elif request_type == 'artworks':
-        ctx = {'artworks': Artwork.objects.all(), "seeall": True, }
-    elif request_type == 'exhibits':
-        ctx = {'exhibits': Exhibit.objects.all(), "seeall": True, }
-
+    items = {'objects': Object, 'markers':  Marker, 'artworks': Artwork, 'exhibits': Exhibit}
+    if request_type != None:
+        ctx = {request_type: items[request_type].objects.all(), "seeall": True}
+    else:
+        ctx = {}
     return render(request, 'core/collection.jinja2', ctx)
 
 def upload_image_form(request):
