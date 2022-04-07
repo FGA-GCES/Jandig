@@ -16,6 +16,13 @@ log = logging.getLogger('ej')
 User = get_user_model()
 
 
+def clean_email(email, username):
+    if email and User.objects.filter(email=email).exclude(username=username).exists():
+        raise forms.ValidationError(_('E-mail must be unique'))
+
+    return email
+
+
 class SignupForm(UserCreationForm):
 
     email = forms.EmailField(
@@ -39,15 +46,6 @@ class SignupForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['email', 'username', 'password1', 'password2']
-
-
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        username = self.cleaned_data.get('username')
-        if email and User.objects.filter(email=email).exclude(username=username).exists():
-            raise forms.ValidationError(_('E-mail taken'))
-
-        return email
 
 
 class PasswordChangeForm(OrigPasswordChangeForm):
@@ -107,8 +105,6 @@ class ProfileForm(forms.ModelForm):
         if username and User.objects.filter(username=username).exclude(username=self.instance.user.username).exists():
             raise forms.ValidationError(_('Username already in use'))
         return username
-
-    # call clean email Function
 
 
 
