@@ -6,6 +6,7 @@ from django.http import Http404, JsonResponse
 from django.views.decorators.cache import cache_page
 from django.views.decorators.http import require_http_methods
 from ARte.users.views_utils.artwork_utils import build_element_data, save_artwork, save_exhibit, save_upload
+from ARte.users.views_utils.object_utils import build_model_data
 from ARte.users.views_utils.password_utils import build_global_vars, validate_username_or_email
 from ARte.users.views_utils.element_utils import build_ctx, build_existent_element, save_element
 from ARte.users.views_utils.signup_utils import perform_save
@@ -324,30 +325,15 @@ def edit_elements(request, form_class, route, model, model_data):
 def edit_object(request):
     index = request.GET.get("id", "-1")
     model = Object.objects.get(id=index)
+    model_data = build_model_data(model, type='object')
 
-    model_data = {
-        "source": model.source,
-        "uploaded_at": model.uploaded_at,
-        "author": model.author,
-        "scale": model.scale,
-        "position": model.position,
-        "rotation": model.rotation,
-        "title": model.title,
-    }
     return edit_elements(request, UploadObjectForm, route='users/edit-object.jinja2', model=model, model_data=model_data)
 
 @login_required
 def edit_marker(request):
     index = request.GET.get("id", "-1")
     model = Marker.objects.get(id=index)
-
-    model_data = {
-        "source": model.source,
-        "uploaded_at": model.uploaded_at,
-        "author": model.author,
-        "patt": model.patt,
-        "title": model.title,
-    }
+    model_data = build_model_data(model, type='marker')
 
     return edit_elements(request, UploadMarkerForm, route='users/edit-marker.jinja2', model=model, model_data=model_data)
 
@@ -370,21 +356,13 @@ def edit_artwork(request):
                 "title": form.cleaned_data["title"],
                 "description": form.cleaned_data["description"],
             }
-            print(model_data['augmented'])
+
+            log.warning(model_data['augmented'])
             model.update(**model_data)
             return redirect('profile')
 
     model = model.first()
-    model_data = {
-        "marker": model.marker,
-        "marker_author": model.marker.author,
-        "augmented": model.augmented,
-        "augmented_author": model.augmented.author,
-        "title": model.title,
-        "description": model.description,
-        "existent_marker": model.marker.id,
-        "existent_object": model.augmented.id,
-    }
+    model_data = build_model_data(model, type='artwork')
 
     return render(
         request,
@@ -403,7 +381,8 @@ def edit_artwork(request):
 def edit_exhibit(request):
     index = request.GET.get("id","-1")
     model = Exhibit.objects.filter(id=index)
-    if(not model or model.first().owner != Profile.objects.get(user=request.user)):
+    user = Profile.objects.get(user=request.user)
+    if(not model or model.first().owner != user):
         raise Http404
 
     if(request.method == "POST"):
