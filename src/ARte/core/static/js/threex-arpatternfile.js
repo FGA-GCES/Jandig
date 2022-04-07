@@ -90,14 +90,7 @@ THREEx.ArPatternFile.buildFullMarker = function(innerImageURL, pattRatio, onComp
     context.fillRect(0, 0, canvas.width, canvas.height)
 
     // copy image on canvas
-    context.fillStyle = 'black';
-    context.fillRect(
-        whiteMargin * canvas.width,
-        whiteMargin * canvas.height,
-        canvas.width * (1 - 2 * whiteMargin),
-        canvas.height * (1 - 2 * whiteMargin)
-    );
-
+    copyImageOnCanvas(context, canvas)
     // clear the area for innerImage (in case of transparent image)
     context.fillStyle = 'white';
     context.fillRect(
@@ -123,4 +116,14 @@ THREEx.ArPatternFile.buildFullMarker = function(innerImageURL, pattRatio, onComp
         onComplete(imageUrl)
     })
     innerImage.src = innerImageURL
+}
+
+const copyImageOnCanvas = (currentCanvas, canvasContext) => {
+    canvasContext.fillStyle = 'black';
+    canvasContext.fillRect(
+        whiteMargin * currentCanvas.width,
+        whiteMargin * currentCanvas.height,
+        currentCanvas.width * (1 - 2 * whiteMargin),
+        currentCanvas.height * (1 - 2 * whiteMargin)
+    );
 }
