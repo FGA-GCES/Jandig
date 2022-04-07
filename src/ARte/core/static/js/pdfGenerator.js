@@ -40,33 +40,9 @@ document
 
 document
   .querySelector("#buttonDownloadFullImage")
-  .addEventListener("click", function () {
-    // debugger
-    if (innerImageURL === null) {
-      alert("upload a file first");
-      return;
-    }
+  .addEventListener("click", handleDownloadFullImage);
 
-    // tech from https://stackoverflow.com/questions/3665115/create-a-file-in-memory-for-user-to-download-not-through-server
-    var domElement = window.document.createElement("a");
-    domElement.href = fullMarkerURL;
-    domElement.download = "marker.png";
-    document.body.appendChild(domElement);
-    domElement.click();
-    document.body.removeChild(domElement);
-  });
-
-document.querySelector("#fileinput").addEventListener("change", function () {
-  var file = this.files[0];
-  // debugger
-
-  var reader = new FileReader();
-  reader.onload = function (event) {
-    innerImageURL = event.target.result;
-    updateFullMarkerImage();
-  };
-  reader.readAsDataURL(file);
-});
+document.querySelector("#fileinput").addEventListener("change", handleFileInput);
 
 function updateFullMarkerImage() {
   var patternRatio = 0.6;
@@ -137,4 +113,32 @@ function generatePdfSixPerPage() {
     content: [columns, columns, columns],
   };
   pdfMake.createPdf(docDefinition).open();
+}
+
+function handleFileInput(inputEvent) {
+  const file = inputEvent.target.files[0];
+
+  let reader = new FileReader();
+  reader.onload = (event) => {
+    innerImageURL = event.target.result;
+    updateFullMarkerImage();
+  };
+  reader.readAsDataURL(file);
+}
+
+function handleDownloadFullImage() {
+  if (innerImageURL === null) {
+    alert("upload a file first");
+    return;
+  }
+  createDownloadHyperlink()
+}
+
+function createDownloadHyperlink() {
+  let domElement = window.document.createElement("a");
+  domElement.href = fullMarkerURL;
+  domElement.download = "marker.png";
+  document.body.appendChild(domElement);
+  domElement.click();
+  document.body.removeChild(domElement);
 }
