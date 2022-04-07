@@ -6,6 +6,7 @@ from django.http import Http404, JsonResponse
 from django.views.decorators.cache import cache_page
 from django.views.decorators.http import require_http_methods
 from ARte.users.views_utils.password_utils import build_global_vars, validate_username_or_email
+from ARte.users.views_utils.element_utils import build_ctx, build_existent_element, save_element
 from ARte.users.views_utils.signup_utils import perform_save
 
 from core.models import Exhibit, Marker, Object, Artwork
@@ -101,8 +102,8 @@ def recover_edit_password(request):
 
         if form.is_valid():
             form.save()
-
             return redirect('login')
+
     else:
         form = SetPasswordForm(recover_password_user)
 
@@ -120,7 +121,6 @@ def invalid_recovering_email_or_username(request):
 @login_required
 @require_http_methods(["GET"])
 def profile(request):
-   
     user = request.GET.get('user')
     
     if user:
@@ -128,35 +128,19 @@ def profile(request):
     else:
         profile = Profile.objects.select_related().get(user=request.user)
 
+    ctx = build_ctx(profile, user)
 
-    exhibits = profile.exhibits.all()
-    markers = profile.marker_set.all()
-    objects = profile.object_set.all()
-    artworks = profile.artwork_set.all()
-
-    ctx = {
-        'exhibits': exhibits,
-        'artworks': artworks,
-        'markers':markers,
-        'objects':objects,
-        'profile':True, 
-        'button_enable': False if user else True
-    }
     return render(request, 'users/profile.jinja2', ctx)
 
 @cache_page(60 * 60)
 def get_element(request, form, form_class, form_type, source, author, existent_element):
     element = None
+    log.warning(form)
 
     if(source and author):
-        instance = form_type(source=source, author=author)
-        element = form_class(instance=instance).save(commit=False)
-        element.save()
+        element = save_element(form_type, form_class, source, author)
     elif(existent_element):
-        qs = form_type.objects.filter(id=existent_element)
-        if qs:
-            element = qs[0]
-            element.owner = request.user.profile
+        element = build_existent_element(form_type, existent_element, request)
 
     return element
 
