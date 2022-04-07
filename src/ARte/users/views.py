@@ -9,6 +9,7 @@ from ARte.users.views_utils.artwork_utils import build_element_data, save_artwor
 from ARte.users.views_utils.object_utils import build_model_data
 from ARte.users.views_utils.password_utils import build_global_vars, validate_username_or_email
 from ARte.users.views_utils.element_utils import build_ctx, build_existent_element, save_element
+from ARte.users.views_utils.deletion_utils import define_content_types
 from ARte.users.views_utils.signup_utils import perform_save
 
 from core.models import Exhibit, Marker, Object, Artwork
@@ -557,15 +558,6 @@ def mod_delete(request):
     else:
         delete_content(define_content_types(content_type), request.user, request.GET.get('instance_id', -1))
     return redirect('moderator-page')
-
-def define_content_types(cont_type):
-    content_types = {
-        'marker': Marker,
-        'object': Object,
-        'artwork': Artwork,
-        'exhibit': Exhibit
-    }
-    return content_types.get(cont_type)
 
 def mod(request):
     ctx = {
