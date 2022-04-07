@@ -2,65 +2,42 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 
 from .forms import LoginForm
-from .views import (
-    download_exhibit,
-    edit_object,
-    edit_marker,
-    signup,
-    recover_password,
-    recover_edit_password,
-    invalid_recovering_email_or_username,
-    recover_code,
-    wrong_verification_code,
-    profile,
-    marker_upload,object_upload,
-    create_artwork, create_exhibit,
-    edit_artwork,
-    element_get,
-    edit_exhibit,
-    edit_profile,
-    edit_password,
-    delete,
-    related_content,
-    mod_delete,
-    permission_denied,
-    mod
-)
+from . import views
 
 urlpatterns = [
-    path('signup/', signup, name='signup'),
+    path('signup/', views.signup, name='signup'),
     path('login/', auth_views.LoginView.as_view(
         template_name='users/login.jinja2',
         authentication_form=LoginForm,
     ), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('recover/', recover_password, name='recover'),
-    path('recover-code/', recover_code, name='recover-code'),
+    path('recover/', views.recover_password, name='recover'),
+    path('recover-code/', views.recover_code, name='recover-code'),
 
-    path('profile/', profile, name='profile'),
-    path('profile/edit/', edit_profile, name="edit-profile"),
-    path('profile/edit-password/', edit_password, name="edit-password"),
-    path('wrong-verification-code', wrong_verification_code, name="wrong-verification-code"),
-    path('invalid-recovering-email', invalid_recovering_email_or_username, name="invalid_recovering_email_or_username"),
-    path('recover-edit-password', recover_edit_password, name="recover-edit-password"),
+    path('profile/', views.profile, name='profile'),
+    path('profile/edit/', views.edit_profile, name="edit-profile"),
+    path('profile/edit-password/', views.edit_password, name="edit-password"),
+    path('wrong-verification-code', views.wrong_verification_code, name="wrong-verification-code"),
+    path('invalid-recovering-email', views.invalid_recovering_email_or_username, name="invalid_recovering_email_or_username"),
+    path('recover-edit-password', views.recover_edit_password, name="recover-edit-password"),
 
-    path('markers/upload/', marker_upload, name='marker-upload'),
-    path('objects/upload/', object_upload, name='object-upload'),
-    path('element/get/', element_get, name='element-get'),
+    path('markers/upload/', views.marker_upload, name='marker-upload'),
+    path('objects/upload/', views.object_upload, name='object-upload'),
+    path('element/get/', views.element_get, name='element-get'),
 
-    path('objects/edit/', edit_object, name='edit-object'),
-    path('markers/edit/', edit_marker, name='edit-marker'),
+    path('objects/edit/', views.edit_object, name='edit-object'),
+    path('markers/edit/', views.edit_marker, name='edit-marker'),
 
-    path('artworks/create/', create_artwork, name='create-artwork'),
-    path('artworks/edit/', edit_artwork, name="edit-artwork"),
+    path('artworks/create/', views.create_artwork, name='create-artwork'),
+    path('artworks/edit/', views.edit_artwork, name="edit-artwork"),
 
-    path('exhibits/create/', create_exhibit, name='create-exhibit'),
-    path('exhibits/edit/', edit_exhibit, name='edit-exhibit'),
-    path('download-exhibit', download_exhibit, name="download-exhibit"),
+    path('exhibits/create/', views.create_exhibit, name='create-exhibit'),
+    path('exhibits/edit/', views.edit_exhibit, name='edit-exhibit'),
+    path('download-exhibit', views.download_exhibit, name="download-exhibit"),
 
-    path('content/delete/', delete, name='delete-content'),
-    path('moderator-page/', mod, name='moderator-page'),
-    path('permission-denied/', permission_denied, name='permission-denied'),
-    path('content/mod-delete/', mod_delete, name='mod-delete-content'),
-    path('related-content', related_content, name='related-content'),
+    path('content/delete/', views.delete, name='delete-content'),
+    path('moderator-page/', views.mod, name='moderator-page'),
+    path('permission-denied/', views.permission_denied, name='permission-denied'),
+    path('content/mod-delete/', views.mod_delete, name='mod-delete-content'),
+    path('related-content', views.related_content, name='related-content'),
 ]
