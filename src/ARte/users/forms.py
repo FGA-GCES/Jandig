@@ -124,15 +124,15 @@ class LoginForm(AuthenticationForm):
 
     def clean_username(self):
         username_or_email = self.cleaned_data.get('username')
+        field_with_email = User.objects.filter(username=username_or_email).exists()
+        field_with_username = User.objects.filter(username=username_or_email).exists()
         if '@' in username_or_email:
-            if not User.objects.filter(email=username_or_email).exists():
-                raise forms.ValidationError(_('Username/email not found'))
+            if (not field_with_email) and (not field_with_username):
+                raise forms.ValidationError(_('Username or email not found'))
             user = User.objects.get(email=username_or_email)
             if user:
                 return user.username
-        else:
-            if not User.objects.filter(username=username_or_email).exists():
-                raise forms.ValidationError(_('Username/email not found'))
+       
 
         # Already is a valid username
         return username_or_email
