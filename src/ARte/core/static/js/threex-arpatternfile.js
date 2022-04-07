@@ -99,22 +99,16 @@ THREEx.ArPatternFile.buildFullMarker = function (innerImageURL, pattRatio, onCom
         canvasContext: context,
         innerMargin
     })
-
-
-    // display innerImage in the middle
+    
     let innerImage = document.createElement('img')
-    innerImage.addEventListener('load', function () {
-        // draw innerImage
-        context.drawImage(innerImage,
-            innerMargin * canvas.width,
-            innerMargin * canvas.height,
-            canvas.width * (1 - 2 * innerMargin),
-            canvas.height * (1 - 2 * innerMargin)
-        );
+    innerImage.addEventListener('load', drawInnerImage({
+        currentCanvas: canvas,
+        canvasContext: context,
+        innerMargin,
+        imageToDraw: innerImage,
+        onCompleteCallback: onComplete
+    }))
 
-        let imageUrl = canvas.toDataURL()
-        onComplete(imageUrl)
-    })
     innerImage.src = innerImageURL
 }
 
@@ -136,4 +130,16 @@ const clearInnerImageArea = ({ currentCanvas, canvasContext, innerMargin }) => {
         currentCanvas.width * (1 - 2 * innerMargin),
         currentCanvas.height * (1 - 2 * innerMargin)
     );
+}
+
+const drawInnerImage = ({ currentCanvas, canvasContext, innerMargin, imageToDraw, onCompleteCallback }) => {
+      canvasContext.drawImage(imageToDraw,
+        innerMargin * currentCanvas.width,
+        innerMargin * currentCanvas.height,
+        currentCanvas.width * (1 - 2 * innerMargin),
+        currentCanvas.height * (1 - 2 * innerMargin)
+    );
+
+    const imageUrl = canvas.toDataURL()
+    onCompleteCallback(imageUrl)
 }
