@@ -1,4 +1,3 @@
-from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import update_session_auth_hash, get_user_model
 from django.contrib.auth.forms import SetPasswordForm
@@ -6,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404, JsonResponse
 from django.views.decorators.cache import cache_page
 from django.views.decorators.http import require_http_methods
+from ARte.users.views_utils.password_utils import build_global_vars, validate_username_or_email
+from ARte.users.views_utils.signup_utils import perform_save
 
 from core.models import Exhibit, Marker, Object, Artwork
 from .models import Profile
@@ -34,13 +35,8 @@ def signup(request):
         form = SignupForm(request.POST)
 
         if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
-            login(request, user)
+            perform_save(request, form)
             return redirect('home')
-
 
     else:
         form = SignupForm()
@@ -55,25 +51,21 @@ def recover_password(request):
         recover_password_form = RecoverPasswordForm(request.POST)
 
         if recover_password_form.is_valid():
-            username_or_email = recover_password_form.cleaned_data.get('username_or_email')
             user_service = UserService()
-            username_or_email_is_valid = user_service.check_if_username_or_email_exist(username_or_email)
+            username_or_email_is_valid, username_or_email = validate_username_or_email(recover_password_form, user_service)
+
             if (not username_or_email_is_valid):
                 return redirect('invalid_recovering_email_or_username')
 
             global global_recovering_email
-            global_recovering_email = user_service.get_user_email(username_or_email)
-
             global global_verification_code
-            encrypt_service = EncryptService()
-            global_verification_code = encrypt_service.generate_verification_code(global_recovering_email)
-
-            build_message_and_send_to_user(global_recovering_email)
+            global_recovering_email, global_verification_code = build_global_vars(user_service, username_or_email)
 
         return redirect('recover-code')
 
     recover_password_form = RecoverPasswordForm()
     return render(request, 'users/recover-password.jinja2', {'form': recover_password_form})
+
 
 def build_message_and_send_to_user(email):
     message = f'You have requested a new password. This is your verification code: {global_verification_code}\nCopy it and put into the field.'
