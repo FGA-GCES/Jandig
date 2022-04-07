@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404, JsonResponse
 from django.views.decorators.cache import cache_page
 from django.views.decorators.http import require_http_methods
-from ARte.users.views_utils.artwork_utils import build_element_data, save_artwork, save_exhibit
+from ARte.users.views_utils.artwork_utils import build_element_data, save_artwork, save_exhibit, save_upload
 from ARte.users.views_utils.password_utils import build_global_vars, validate_username_or_email
 from ARte.users.views_utils.element_utils import build_ctx, build_existent_element, save_element
 from ARte.users.views_utils.signup_utils import perform_save
@@ -275,12 +275,11 @@ def upload_elements(request, form_class, form_type, route):
     if request.method == 'POST':
         form = form_class(request.POST, request.FILES)
         if form.is_valid():
-            upload = form.save(commit=False)
-            upload.owner = request.user.profile
-            upload.save()
+            save_upload(form, request)
             return redirect('home')
     else:
         form = form_class()
+
     return render(request,'users/upload.jinja2',
         {
             'form_type': form_type,
@@ -299,13 +298,14 @@ def object_upload(request):
     return upload_elements(request, UploadObjectForm, 'object', 'object-upload')
 
 def edit_elements(request, form_class, route, model, model_data):
-    if(not model or model.owner != Profile.objects.get(user=request.user)):
+    user = Profile.objects.get(user=request.user)
+    if(not model or model.owner != user):
         raise Http404
 
     if(request.method == "POST"):
         form = form_class(request.POST, request.FILES, instance = model)
-
         form.full_clean()
+
         if form.is_valid():
             form.save()
             return redirect('profile')

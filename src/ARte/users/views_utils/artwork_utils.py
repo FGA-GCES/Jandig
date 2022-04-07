@@ -57,3 +57,8 @@ def build_element_data(element_type, element):
         }
     
     return data
+
+def save_upload(form, request):
+    upload = form.save(commit=False)
+    upload.owner = request.user.profile
+    upload.save()
