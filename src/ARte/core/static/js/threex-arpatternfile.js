@@ -76,21 +76,24 @@ THREEx.ArPatternFile.triggerDownload = function(patternFileString) {
     document.body.removeChild(domElement)
 }
 
-THREEx.ArPatternFile.buildFullMarker = function(innerImageURL, pattRatio, onComplete) {
-    var whiteMargin = 0.1
-    var blackMargin = (1 - 2 * whiteMargin) * ((1 - pattRatio) / 2)
+THREEx.ArPatternFile.buildFullMarker = function (innerImageURL, pattRatio, onComplete) {
+    const whiteMargin = 0.1
+    const blackMargin = (1 - 2 * whiteMargin) * ((1 - pattRatio) / 2)
+    const innerMargin = whiteMargin + blackMargin
 
-    var innerMargin = whiteMargin + blackMargin
-
-    var canvas = document.createElement('canvas');
-    var context = canvas.getContext('2d')
+    let canvas = document.createElement('canvas');
+    let context = canvas.getContext('2d')
     canvas.width = canvas.height = 512
 
     context.fillStyle = 'white';
     context.fillRect(0, 0, canvas.width, canvas.height)
 
     // copy image on canvas
-    copyImageOnCanvas(context, canvas)
+    copyImageOnCanvas({
+        currentCanvas: canvas,
+        canvasContext: context,
+        whiteMargin
+    })
     // clear the area for innerImage (in case of transparent image)
     context.fillStyle = 'white';
     context.fillRect(
@@ -102,8 +105,8 @@ THREEx.ArPatternFile.buildFullMarker = function(innerImageURL, pattRatio, onComp
 
 
     // display innerImage in the middle
-    var innerImage = document.createElement('img')
-    innerImage.addEventListener('load', function() {
+    let innerImage = document.createElement('img')
+    innerImage.addEventListener('load', function () {
         // draw innerImage
         context.drawImage(innerImage,
             innerMargin * canvas.width,
@@ -112,13 +115,13 @@ THREEx.ArPatternFile.buildFullMarker = function(innerImageURL, pattRatio, onComp
             canvas.height * (1 - 2 * innerMargin)
         );
 
-        var imageUrl = canvas.toDataURL()
+        let imageUrl = canvas.toDataURL()
         onComplete(imageUrl)
     })
     innerImage.src = innerImageURL
 }
 
-const copyImageOnCanvas = (currentCanvas, canvasContext) => {
+const copyImageOnCanvas = ({ currentCanvas, canvasContext, whiteMargin }) => {
     canvasContext.fillStyle = 'black';
     canvasContext.fillRect(
         whiteMargin * currentCanvas.width,
