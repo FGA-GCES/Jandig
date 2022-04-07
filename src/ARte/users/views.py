@@ -36,39 +36,32 @@ log = logging.getLogger('ej')
 def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
-
         if form.is_valid():
             perform_save(request, form)
             return redirect('home')
-
     else:
         form = SignupForm()
 
     return render(request, 'users/signup.jinja2', {'form': form})
-
 
 User = get_user_model()
 
 def recover_password(request):
     if request.method == 'POST':
         recover_password_form = RecoverPasswordForm(request.POST)
-
         if recover_password_form.is_valid():
             user_service = UserService()
             username_or_email_is_valid, username_or_email = validate_username_or_email(recover_password_form, user_service)
-
             if (not username_or_email_is_valid):
                 return redirect('invalid_recovering_email_or_username')
-
             global global_recovering_email
             global global_verification_code
             global_recovering_email, global_verification_code = build_global_vars(user_service, username_or_email)
-
         return redirect('recover-code')
 
     recover_password_form = RecoverPasswordForm()
-    return render(request, 'users/recover-password.jinja2', {'form': recover_password_form})
 
+    return render(request, 'users/recover-password.jinja2', {'form': recover_password_form})
 
 def build_message_and_send_to_user(email):
     message = f'You have requested a new password. This is your verification code: {global_verification_code}\nCopy it and put into the field.'
@@ -76,36 +69,30 @@ def build_message_and_send_to_user(email):
     multipart_message = email_service.build_multipart_message(email)
     email_service.send_email_to_recover_password(multipart_message)
 
-
 def recover_code(request):
     if request.method == 'POST':
         form = RecoverPasswordCodeForm(request.POST)
-
         if form.is_valid():
             code = form.cleaned_data.get('verification_code')
-
             log.warning('Inserido: %s', code)
             log.warning('Correto: %s', global_verification_code)
-
-            if(code == global_verification_code):
+            if code == global_verification_code:
                 global recover_password_user
                 recover_password_user = User.objects.get(email=global_recovering_email)
                 return redirect('recover-edit-password')
-
             return redirect('wrong-verification-code')
         return redirect('home')
-    
+
     form = RecoverPasswordCodeForm()
+
     return render(request, 'users/recover-password-code.jinja2', {'form': form})
 
 def recover_edit_password(request):
     if request.method == 'POST':
         form = SetPasswordForm(recover_password_user, data=request.POST)
-
         if form.is_valid():
             form.save()
             return redirect('login')
-
     else:
         form = SetPasswordForm(recover_password_user)
 
@@ -119,17 +106,14 @@ def wrong_verification_code(request):
 def invalid_recovering_email_or_username(request):
     return render(request, 'users/invalid-recovering-email.jinja2')
 
-
 @login_required
 @require_http_methods(["GET"])
 def profile(request):
     user = request.GET.get('user')
-    
     if user:
         profile = Profile.objects.get(user=user)
     else:
         profile = Profile.objects.select_related().get(user=request.user)
-
     ctx = build_ctx(profile, user)
 
     return render(request, 'users/profile.jinja2', ctx)
@@ -166,15 +150,11 @@ def get_augmented(request, form):
 def create_artwork(request):
     if request.method == 'POST':
         form = ArtworkForm(request.POST, request.FILES)
-
         if form.is_valid():
-
             marker = get_marker(request,form)
             augmented = get_augmented(request, form)
-
             if marker and augmented:
                 save_artwork(form, request, marker, augmented)
-            
             return redirect('home')
     else:
         form = ArtworkForm()
@@ -199,7 +179,6 @@ def create_exhibit(request):
         if form.is_valid():
             save_exhibit(form, request)
             return redirect('home')
-
     else:
         form = ExhibitForm()
 
@@ -223,7 +202,6 @@ def download_exhibit(request):
     marker_names = []
     object_names = []
     patt_names = []
-
     all_data = []
 
     for artwork in artworks:
@@ -253,7 +231,6 @@ def download_exhibit(request):
         all_data.append(data)
 
     return JsonResponse(all_data)
-
 
 @cache_page(60 * 2)
 @require_http_methods(["GET"])
@@ -304,7 +281,7 @@ def edit_elements(request, form_class, route, model, model_data):
     if(not model or model.owner != user):
         raise Http404
 
-    if(request.method == "POST"):
+    if request.method == "POST":
         form = form_class(request.POST, request.FILES, instance = model)
         form.full_clean()
 
@@ -346,7 +323,7 @@ def edit_artwork(request):
     if(not model or model.first().author != Profile.objects.get(user=request.user)):
         raise Http404
 
-    if(request.method == "POST"):
+    if request.method == "POST":
         form = ArtworkForm(request.POST, request.FILES)
 
         form.full_clean()
@@ -386,7 +363,7 @@ def edit_exhibit(request):
     if(not model or model.first().owner != user):
         raise Http404
 
-    if(request.method == "POST"):
+    if request.method == "POST":
         form = ExhibitForm(request.POST)
 
         form.full_clean()
@@ -401,7 +378,6 @@ def edit_exhibit(request):
             model.update(**model_data)
             model = model.first()
             model.artworks.set(artworks)
-
             return redirect('profile')
 
     model = model.first()
@@ -450,7 +426,6 @@ def edit_profile(request):
     profile = Profile.objects.get(user=request.user)
     if request.method == 'POST':
         form = ProfileForm(request.POST, instance=profile)
-
         if form.is_valid():
             profile = form.save(commit=False)
             user = profile.user
@@ -458,7 +433,6 @@ def edit_profile(request):
             user.username = form.cleaned_data['username']
             user.save(force_update=True)
             profile.save()
-
             return redirect('profile')
     else:
         form = ProfileForm(instance=profile)
@@ -481,7 +455,6 @@ def delete(request):
 
 def delete_content(model, user, instance_id):
     qs = model.objects.filter(id=instance_id)
-   
     if qs:
         instance = qs[0] 
         if user.has_perm('users.moderator'):
@@ -503,7 +476,6 @@ def delete_content_Moderator(instance,user):
     isObject = isinstance(instance, Object)
     isMarker = isinstance(instance, Marker)
     isArtwork = isinstance(instance, Artwork)
-
 
     if isInstanceSameTypeofModel or not instance.in_use:
         instance.delete()
@@ -528,23 +500,17 @@ def related_content(request):
 
     if element_type == 'object':
         element = Object.objects.get(id=element_id)
-
         artworks = element.artworks_list
         exhibits = element.exhibits_list
-
         ctx = {'artworks': artworks, 'exhibits': exhibits, "seeall:":False}
     elif element_type == 'marker':
         element = Marker.objects.get(id=element_id)
-
         artworks = element.artworks_list
         exhibits = element.exhibits_list
-
         ctx = {'artworks': artworks, 'exhibits': exhibits, "seeall:":False}
     elif element_type == 'artwork':
         element = Artwork.objects.get(id=element_id)
-
         exhibits = element.exhibits_list
-
         ctx = {'exhibits': exhibits, "seeall:":False}
 
     return render(request, 'core/collection.jinja2', ctx)
