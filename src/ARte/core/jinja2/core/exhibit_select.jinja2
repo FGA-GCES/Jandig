@@ -17,7 +17,7 @@
             <div class="search-area">
                 <input type="text" id="search-box" name="search" onkeyup="findExhibit()" autocomplete="off" />
             </div>
-            <form name="exhibit-form" action="{{url('exhibit_select')}}" method="post">
+            <form name="exhibit-form" action="{{url('exhibit_select_form')}}" method="post">
                 {{ csrf_input }}
                 {% for field in form.visible_fields() %}
                     <p class="exhibit-field {{field.name}}">

@@ -64,7 +64,7 @@
 
             {% elif element_type == "exhibit" %}
                 {% set ExhibitTitle %}
-                <a href="{{url('exhibit-detail')}}?id={{element.id}}">
+                <a href="{{url('get-exhibit-detail')}}?id={{element.id}}">
                     <h1 class="exhibit-name">{{element.name}}</h1>
                 </a>
                 {%endset%}   
@@ -74,7 +74,7 @@
                     {#<p class="exhibit-slug">TO_BE_FILLED_ON_SCRIPT<b>{{element.slug}}</b></p>#}
                     <p class="by">{{_("Created by ")}} <b>{{element.owner.user.username}}</b></p>
                     <p class="exbDate">{{element.date}}</p>
-                    <p class="exhibit-about"><a href="{{url('exhibit-detail')}}?id={{element.id}}">{{element.artworks_count}} {{ _("Artwork(s)") }}</a></p>  
+                    <p class="exhibit-about"><a href="{{url('get-exhibit-detail')}}?id={{element.id}}">{{element.artworks_count}} {{ _("Artwork(s)") }}</a></p>  
                 {%endset%}
 
                 {%set buttonSeeExhibition%}
@@ -111,7 +111,7 @@
                     {% endif %}
                     {{canDelete_Entity}}
                     {% if preview == True %}
-                        <a href="{{ url('artwork-preview') }}?id={{ element.id }}" class="preview">{{_("Preview Artwork")}}</a>
+                        <a href="{{ url('get_artwork-preview') }}?id={{ element.id }}" class="preview">{{_("Preview Artwork")}}</a>
                     {% endif %}
                 </div>
 

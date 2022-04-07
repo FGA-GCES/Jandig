@@ -1,20 +1,20 @@
 from django.urls import path, include
-from .views import artwork_preview, see_all, service_worker, upload_image, exhibit_select, collection, exhibit_detail, manifest, robots_txt
+from .views import get_artwork_preview, get_all_items, service_worker, upload_image_form, exhibit_select_form, get_collection_items, get_exhibit_detail, manifest, get_robots_txt
 from .views_s.home import home, community, marker_generator, documentation
 
 urlpatterns = [
     path('', home, name='home'),
     path('documentation/', documentation, name='documentation'),
     path('community/', community, name='community'),
-    path('collection/', collection, name='collection'),
-    path('exhibit_select/', exhibit_select, name='exhibit_select'),
-    path('exhibit/', exhibit_detail, name="exhibit-detail"),
-    path('artwork/', artwork_preview, name="artwork-preview"),
+    path('collection/', get_collection_items, name='get_collection_items'),
+    path('exhibit_select/', exhibit_select_form, name='exhibit_select_form'),
+    path('exhibit/', get_exhibit_detail, name="get-exhibit-detail"),
+    path('artwork/', get_artwork_preview, name="get-artwork-preview"),
     path('generator/', marker_generator, name='marker-generator'),
     path('sw.js', service_worker, name='sw'),
     path('manifest.json', manifest, name='manifest'),
-    path('upload', upload_image, name='upload-image'),
+    path('upload', upload_image_form, name='upload-image'),
     path('i18n/', include('django.conf.urls.i18n')),
-    path('see_all/', see_all, name='see-all'),
-    path('robots.txt/', robots_txt),
+    path('see_all/', get_all_items, name='get_all_items'),
+    path('robots.txt/', get_robots_txt),
 ]

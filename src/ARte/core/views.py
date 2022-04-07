@@ -37,7 +37,7 @@ def index(request):
 
 @cache_page(60 * 2)
 @require_http_methods(["GET"])
-def collection(request):
+def get_collection_items(request):
 
     exhibits = Exhibit.objects.all().order_by('-id')[:4]
     artworks = Artwork.objects.all().order_by('-id')[:6]
@@ -57,7 +57,7 @@ def collection(request):
 
 @cache_page(60 * 2)
 @require_http_methods(["GET"])
-def see_all(request):
+def get_all_items(request):
     request_type = request.GET.get('which')
     ctx = {}
     if request_type == 'objects':
@@ -71,7 +71,7 @@ def see_all(request):
 
     return render(request, 'core/collection.jinja2', ctx)
 
-def upload_image(request):
+def upload_image_form(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         image = request.FILES.get('file')
@@ -83,7 +83,7 @@ def upload_image(request):
     return render(request, 'core/upload.jinja2', {'form': form})
 
 
-def exhibit_select(request):
+def exhibit_select_form(request):
     if request.method == 'POST':
         form = ExhibitForm(request.POST)
         if form.is_valid():
@@ -97,7 +97,7 @@ def exhibit_select(request):
 
 @cache_page(60 * 60)
 @require_http_methods(["GET"])
-def exhibit_detail(request):
+def get_exhibit_detail(request):
     index = request.GET.get("id")
     exhibit = Exhibit.objects.get(id=index)
     ctx = {
@@ -108,7 +108,7 @@ def exhibit_detail(request):
     return render(request, 'core/exhibit_detail.jinja2', ctx)
 
 @require_http_methods(["GET"])
-def artwork_preview(request):
+def get_artwork_preview(request):
     artwork_id = request.GET.get("id")
 
     ctx = {
@@ -118,7 +118,7 @@ def artwork_preview(request):
 
 
 @require_http_methods(["GET"])
-def robots_txt(request):
+def get_robots_txt(request):
     lines = [
         "User-Agent: *",
         "Disallow: ",
