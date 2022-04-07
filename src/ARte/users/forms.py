@@ -23,6 +23,25 @@ def clean_email(email, username):
     return email
 
 
+def is_user_in_database(password, username_or_email):
+    user = None
+    username_or_email_in_database = True
+
+    if '@' in username_or_email:
+        if User.objects.filter(email=username_or_email).exists():
+            username = User.objects.get(email=username_or_email).username
+            user = authenticate(username = username, password=password)
+        else:
+            username_or_email_in_database = False
+    else:
+        if User.objects.filter(username=username_or_email).exists():
+            user = authenticate(username=username_or_email, password=password)
+        else:
+            username_or_email_in_database = False
+    
+    return username_or_email_in_database
+
+
 class SignupForm(UserCreationForm):
 
     email = forms.EmailField(
@@ -132,24 +151,8 @@ class LoginForm(AuthenticationForm):
     def clean_password(self):
         password = self.cleaned_data.get('password')
         username_or_email = self.data.get('username')
-        user = None
-        username_or_email_wrong = False
-
-        if '@' in username_or_email:
-            if User.objects.filter(email=username_or_email).exists():
-                username = User.objects.get(email=username_or_email).username
-                user = authenticate(username = username, password=password)
-            else:
-                username_or_email_wrong = True
-                # raise forms.ValidationError(_('Email Wrong!'))
-        else:
-            if User.objects.filter(username=username_or_email).exists():
-                user = authenticate(username=username_or_email, password=password)
-            else:
-                username_or_email_wrong = True
-                # raise forms.ValidationError(_('Username Wrong!'))
-
-        if not user and not username_or_email_wrong:
+        
+        if not is_user_in_database(password, username_or_email):
             raise forms.ValidationError(_('Wrong password!'))
 
         return password
