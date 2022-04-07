@@ -119,10 +119,8 @@ def profile(request):
     return render(request, 'users/profile.jinja2', ctx)
 
 @cache_page(60 * 60)
-def get_element(request, form, form_class, form_type, source, author, existent_element):
+def get_element(request, form_class, form_type, source, author, existent_element):
     element = None
-    log.warning(form)
-
     if(source and author):
         element = save_element(form_type, form_class, source, author)
     elif(existent_element):
@@ -136,7 +134,7 @@ def get_marker(request, form):
     marker_author = form.cleaned_data['marker_author']
     existent_marker = form.cleaned_data['existent_marker']
 
-    return get_element(request, form, UploadMarkerForm, Marker, source=marker_src, author=marker_author, existent_element=existent_marker)
+    return get_element(request, UploadMarkerForm, Marker, source=marker_src, author=marker_author, existent_element=existent_marker)
 
 @cache_page(60 * 60)
 def get_augmented(request, form):
@@ -144,7 +142,7 @@ def get_augmented(request, form):
     object_author = form.cleaned_data['augmented_author']
     existent_object = form.cleaned_data['existent_object']
 
-    return get_element(request, form, UploadObjectForm, Object, source=object_src, author=object_author, existent_element=existent_object)
+    return get_element(request, UploadObjectForm, Object, source=object_src, author=object_author, existent_element=existent_object)
 
 @login_required
 def create_artwork(request):
