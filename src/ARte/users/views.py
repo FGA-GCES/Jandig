@@ -134,7 +134,7 @@ def profile(request):
     if user:
         profile = Profile.objects.get(user=user)
     else:
-         profile = Profile.objects.select_related().get(user=request.user)
+        profile = Profile.objects.select_related().get(user=request.user)
 
 
     exhibits = profile.exhibits.all()
