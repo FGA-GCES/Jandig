@@ -2,6 +2,7 @@ from django.db import models
 from users.models import Profile
 from django.dispatch import receiver
 from django.db.models.signals import post_delete
+from util import helper
 import re
 
 class Marker(models.Model):
@@ -82,16 +83,7 @@ class Object(models.Model):
         to 1:[something], so that new calculations can be made 
         when a new scale value is entered by the user.
         '''
-        a = re.findall(r'[\d\.\d]+', self.scale)
-        width = float(a[0])
-        height = float(a[1])
-        if width > height :
-            height = (height*1.0)/width
-            width = 1
-        else :
-            width = (width*1.0)/height
-            height = 1
-        return width
+        return helper.calculate_x_proportion(self.scale)
 
     @property
     def yproportion(self):
@@ -100,38 +92,15 @@ class Object(models.Model):
         to 1:[something], so that new calculations can be made 
         when a new scale value is entered by the user.
         '''
-        a = re.findall(r'[\d\.\d]+', self.scale)
-        width = float(a[0])
-        height = float(a[1])
-        if width > height :
-            height = (height*1.0)/width
-            width = 1
-        else :
-            width = (width*1.0)/height
-            height = 1
-        return height
+        return helper.calculate_y_proportion(self.scale)
 
     @property
     def xscale(self):
-        '''
-        The 'xscale' method returns the original proportion
-        of the Object multiplied by the scale value entered
-        by the user, and thus the Object appears resized in
-        augmented reality.
-        '''
-        a = re.findall(r'[\d\.\d]+', self.scale)
-        return a[0]
+        return helper.get_x_measure(self.scale)
 
     @property
     def yscale(self):
-        '''
-        The 'yscale' method returns the original proportion
-        of the Object multiplied by the scale value entered
-        by the user, and thus the Object appears resized in
-        augmented reality.
-        '''
-        a = re.findall(r'[\d\.\d]+', self.scale)
-        return a[1]
+        return helper.get_y_measure(self.scale)
 
     @property
     def fullscale(self):
@@ -140,21 +109,15 @@ class Object(models.Model):
         users the last scale value entered by them, when
         they attempt to edit it.
         '''
-        x = self.xscale
-        y = self.yscale
-        if x > y:
-            return x
-        return y
+        return helper.get_highest_proportion(self.scale)
 
     @property
     def xposition(self):
-        a = re.findall(r'[\d\.\d]+', self.position)
-        return a[0]
+        return helper.get_x_measure(self.position)
 
     @property
     def yposition(self):
-        a = re.findall(r'[\d\.\d]+', self.position)
-        return a[1]
+        return helper.get_y_measure(self.position)
 
 class Artwork(models.Model):
     author = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
