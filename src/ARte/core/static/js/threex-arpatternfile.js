@@ -88,20 +88,17 @@ THREEx.ArPatternFile.buildFullMarker = function (innerImageURL, pattRatio, onCom
     context.fillStyle = 'white';
     context.fillRect(0, 0, canvas.width, canvas.height)
 
-    // copy image on canvas
     copyImageOnCanvas({
         currentCanvas: canvas,
         canvasContext: context,
         whiteMargin
     })
-    // clear the area for innerImage (in case of transparent image)
-    context.fillStyle = 'white';
-    context.fillRect(
-        innerMargin * canvas.width,
-        innerMargin * canvas.height,
-        canvas.width * (1 - 2 * innerMargin),
-        canvas.height * (1 - 2 * innerMargin)
-    );
+
+    clearInnerImageArea({
+        currentCanvas: canvas,
+        canvasContext: context,
+        innerMargin
+    })
 
 
     // display innerImage in the middle
@@ -128,5 +125,15 @@ const copyImageOnCanvas = ({ currentCanvas, canvasContext, whiteMargin }) => {
         whiteMargin * currentCanvas.height,
         currentCanvas.width * (1 - 2 * whiteMargin),
         currentCanvas.height * (1 - 2 * whiteMargin)
+    );
+}
+
+const clearInnerImageArea = ({ currentCanvas, canvasContext, innerMargin }) => {
+    canvasContext.fillStyle = 'white';
+    canvasContext.fillRect(
+        innerMargin * currentCanvas.width,
+        innerMargin * currentCanvas.height,
+        currentCanvas.width * (1 - 2 * innerMargin),
+        currentCanvas.height * (1 - 2 * innerMargin)
     );
 }
