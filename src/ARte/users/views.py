@@ -475,15 +475,7 @@ def edit_profile(request):
 @require_http_methods(["GET"])
 def delete(request):
     content_type = request.GET.get('content_type', None)
-   
-    if content_type == 'marker':
-        delete_content(Marker, request.user, request.GET.get('id', -1))
-    elif content_type == 'object':
-        delete_content(Object, request.user, request.GET.get('id', -1))
-    elif content_type == 'artwork':
-        delete_content(Artwork, request.user, request.GET.get('id', -1))
-    elif content_type == 'exhibit':
-        delete_content(Exhibit, request.user, request.GET.get('id', -1))
+    delete_content(define_content_types(content_type), request.user, request.GET.get('id', -1))
     return redirect('profile')
 
 def delete_content(model, user, instance_id):
@@ -560,16 +552,20 @@ def related_content(request):
 @require_http_methods(["GET"])
 def mod_delete(request):
     content_type = request.GET.get('content_type', None)
-    if content_type == 'marker':
-        delete_content(Marker, request.user, request.GET.get('instance_id', -1))
-    elif content_type == 'object':
-        delete_content(Object, request.user, request.GET.get('instance_id', -1))
-    elif content_type == 'artwork':
-        delete_content(Artwork, request.user, request.GET.get('instance_id', -1))
-    elif content_type == 'exhibit':
-        delete_content(Exhibit, request.user, request.GET.get('id', -1))
+    if content_type == 'exhibit':
+        delete_content(define_content_types(content_type), request.user, request.GET.get('id', -1))
+    else:
+        delete_content(define_content_types(content_type), request.user, request.GET.get('instance_id', -1))
     return redirect('moderator-page')
 
+def define_content_types(cont_type):
+    content_types = {
+        'marker': Marker,
+        'object': Object,
+        'artwork': Artwork,
+        'exhibit': Exhibit
+    }
+    return content_types.get(cont_type)
 
 def mod(request):
     ctx = {
