@@ -2,8 +2,9 @@ import os
 import environ
 from .wait_db import start_services
 from django.utils.translation import ugettext_lazy as _
-
 from socket import gethostbyname, gethostname
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 ROOT_DIR = environ.Path(__file__) - 2  # (ARte/config/settings.py - 2 = ARte/)
 APPS_DIR = ROOT_DIR.path('ARte')
@@ -35,9 +36,6 @@ CUSTOM_ALLOWED_HOSTS = env.list('DJANGO_ALLOWED_HOSTS', default=['*'])
 ALLOWED_HOSTS += CUSTOM_ALLOWED_HOSTS
 print(f"ALLOWED_HOSTS:{ALLOWED_HOSTS}")
 # Application definition
-
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
 
 sentry_sdk.init(
     dsn="https://081a2c3476b24a9f9a51d74bde539b62@o968990.ingest.sentry.io/5920229",

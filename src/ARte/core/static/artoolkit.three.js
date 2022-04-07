@@ -247,7 +247,6 @@
 				Listen to getMarker events to keep track of Three.js markers.
 			*/
 			this.addEventListener('getMarker', function(ev) {
-				var marker = ev.data.marker;
 				var obj;
 				if (ev.data.type === artoolkit.PATTERN_MARKER) {
 					obj = this.threePatternMarkers[ev.data.marker.idPatt];

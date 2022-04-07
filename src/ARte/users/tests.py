@@ -15,8 +15,8 @@ class UserTestCase(TestCase):
         self.encrypt_service = EncryptService()
         self.user_service = UserService()
     
-        request = self.client_test.get('/recover/', follow=True)
     def test_redirect_to_recover_password_page(self):
+        request = self.client_test.get('/recover/', follow=True)
         response = recover_password(request)
         self.assertEqual(response.status_code, 200)
 

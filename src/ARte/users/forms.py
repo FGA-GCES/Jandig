@@ -9,7 +9,6 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.forms import PasswordChangeForm as OrigPasswordChangeForm
 from django.utils.translation import ugettext_lazy as _
 from django.forms.widgets import HiddenInput
-from core.models import Exhibit
 
 from core.models import Marker, Object, Artwork
 from .models import Profile
@@ -151,13 +150,11 @@ class LoginForm(AuthenticationForm):
                 user = authenticate(username = username, password=password)
             else:
                 username_or_email_wrong = True
-                # raise forms.ValidationError(_('Email Wrong!'))
         else:
             if User.objects.filter(username=username_or_email).exists():
                 user = authenticate(username=username_or_email, password=password)
             else:
                 username_or_email_wrong = True
-                # raise forms.ValidationError(_('Username Wrong!'))
 
         if not user and not username_or_email_wrong:
             raise forms.ValidationError(_('Wrong password!'))
@@ -240,15 +237,10 @@ class ExhibitForm(forms.Form):
     artworks = forms.CharField(max_length=1000)
 
     def clean_slug(self):
-        slug = self.cleaned_data['slug']
-        name = self.cleaned_data['name']
-        if not re.match("^[a-zA-Z0-9_]*$", slug):
+        data = self.cleaned_data['slug']
+        if not re.match("^[a-zA-Z0-9_]*$", data):
             raise forms.ValidationError(_("Url can't contain spaces or special characters"))
-        if Exhibit.objects.filter(slug=slug).exists():
-            raise forms.ValidationError(_("That exhibit slug is already in use. Please choose another slug for your exhibit."))
-        if Exhibit.objects.filter(name=name).exists():
-            raise forms.ValidationError(_("That exhibit name is already in use. Please choose another name for your exhibit."))
-        return slug
+        return data
 
     def __init__(self, *args, **kwargs):
         super(ExhibitForm, self).__init__(*args, **kwargs)
