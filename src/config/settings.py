@@ -229,9 +229,11 @@ else:
 
 # Static configuration
 # Add your own apps statics in this list
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "core", "static"),
     os.path.join(BASE_DIR, "users", "static"),
+    os.path.join(BASE_DIR, "core", "static", "images", "icons"),
 ]
 COLLECT_DIR = os.path.dirname(os.path.dirname(BASE_DIR))
 STATIC_ROOT = os.path.join(COLLECT_DIR, "collect")
